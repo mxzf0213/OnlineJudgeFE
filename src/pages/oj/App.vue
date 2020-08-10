@@ -15,11 +15,9 @@
     <BackTop></BackTop>
   </div>
 </template>
-
 <script>
   import { mapActions, mapState } from 'vuex'
   import NavBar from '@oj/components/NavBar.vue'
-
   export default {
     name: 'app',
     components: {

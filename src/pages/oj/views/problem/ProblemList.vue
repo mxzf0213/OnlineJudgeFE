@@ -46,7 +46,6 @@
              disabled-hover></Table>
     </Panel>
     <Pagination :total="total" :page-size="limit" @on-change="pushRouter" :current.sync="query.page"></Pagination>
-
     </Col>
 
     <Col :span="5">
@@ -101,6 +100,10 @@
                 on: {
                   click: () => {
                     this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
+                    // 行为类别：查看 动作：查看题目
+                    // eslint-disable-next-line no-undef
+                    sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'clickCommonProblem', 'http://clickCommonProblem', params.row._id, 'http://commonProblemId')
+                    // console.log('sendTagStatement success!')
                   }
                 },
                 style: {
@@ -121,6 +124,13 @@
                 on: {
                   click: () => {
                     this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
+                    // 行为类别：查看 动作：查看题目
+                    this.$nextTick(function () {
+                      // eslint-disable-next-line no-undef
+                      sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'clickCommonProblem', 'http://clickCommonProblem', params.row._id, 'http://commonProblemId')
+                    }, 3000
+                    // console.log('sendTagStatement success!')
+                    )
                   }
                 },
                 style: {
@@ -267,7 +277,7 @@
       }
     },
     computed: {
-      ...mapGetters(['isAuthenticated'])
+      ...mapGetters(['isAuthenticated', 'user'])
     },
     watch: {
       '$route' (newVal, oldVal) {

@@ -83,13 +83,17 @@
             problemID: row._id
           }
         })
+        // 行为类别：查看 动作：查看题目
+        // eslint-disable-next-line no-undef
+        sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'clickContestProblem', 'http://clickContestProblem', this.$route.params.contestID + ':' + row._id, 'http://contestProblemId')
+        // console.log('sendTagStatement success!')
       }
     },
     computed: {
       ...mapState({
         problems: state => state.contest.contestProblems
       }),
-      ...mapGetters(['isAuthenticated', 'contestRuleType', 'OIContestRealTimePermission'])
+      ...mapGetters(['isAuthenticated', 'contestRuleType', 'OIContestRealTimePermission', 'user'])
     }
   }
 </script>

@@ -46,7 +46,7 @@
 </template>
 <script>
   import moment from 'moment'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
 
   import Pagination from '@oj/components/Pagination'
   import ContestRankMixin from './contestRankMixin'
@@ -196,6 +196,11 @@
         this.addTableColumns(this.contestProblems)
         this.addChartCategory(this.contestProblems)
       }
+      // console.log('sendStatement start!')
+      // console.log(this.user)
+      // eslint-disable-next-line no-undef
+      sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showContestRank', 'http://showContestRank', this.contestID, 'http://contestId')
+      // console.log('sendStatement success!')
     },
     methods: {
       ...mapActions(['getContestProblems']),
@@ -309,6 +314,9 @@
       downloadRankCSV () {
         utils.downloadFile(`contest_rank?download_csv=1&contest_id=${this.$route.params.contestID}&force_refrash=${this.forceUpdate ? '1' : '0'}`)
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
     }
   }
 </script>

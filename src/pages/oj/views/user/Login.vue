@@ -35,7 +35,6 @@
   import { mapGetters, mapActions } from 'vuex'
   import api from '@oj/api'
   import { FormMixin } from '@oj/components/mixins'
-
   export default {
     mixins: [FormMixin],
     data () {

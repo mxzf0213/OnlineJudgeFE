@@ -165,7 +165,7 @@
           <li>
             <p>{{$t('m.Tags')}}</p>
             <p>
-              <Poptip trigger="hover" placement="left-end">
+              <Poptip placement="left-end" @on-popper-show="sendTagStatement">
                 <a>Show</a>
                 <div slot="content">
                   <Tag v-for="tag in problem.tags" :key="tag">{{tag}}</Tag>
@@ -424,6 +424,19 @@
               })
               return
             }
+            // console.log('sendSubmitStatement start!')
+            if (this.contestID) {
+              setTimeout(
+                // eslint-disable-next-line no-undef
+                sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'submitContestProblem', 'http://submitContestProblem', this.contestID + ':' + this.problemID, 'http://contestProblemId'), 0
+              )
+            } else {
+              setTimeout(
+              // eslint-disable-next-line no-undef
+              sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'submitCommonProblem', 'http://submitCommonProblem', this.problemID, 'http://commonProblemId'), 0
+              )
+            }
+            // console.log('sendSubmitStatement success!')
             this.submitted = true
             this.checkSubmissionStatus()
           }, res => {
@@ -463,10 +476,21 @@
       },
       onCopyError (e) {
         this.$error('Failed to copy code')
+      },
+      sendTagStatement () {
+        // console.log('sendTagStatement start!')
+        if (this.contestID) {
+          // eslint-disable-next-line no-undef
+          sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showContestProblemTags', 'http://showContestProblemTags', this.contestID + ':' + this.problemID, 'http://contestProblemId')
+          // console.log('sendTagStatement success!')
+        } else {
+          // eslint-disable-next-line no-undef
+          sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showCommonProblemTags', 'http://showCommonProblemTags', this.problemID, 'http://commonProblemId')
+        }
       }
     },
     computed: {
-      ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus']),
+      ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus', 'user']),
       contest () {
         return this.$store.state.contest.contest
       },

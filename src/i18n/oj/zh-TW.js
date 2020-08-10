@@ -64,6 +64,7 @@ export const m = {
   Profile: '個人資訊設定',
   Account: '帳號設定',
   Security: '安全設定',
+  Performance: '表現',
   // AccoutSetting.vue
   ChangePassword: '更改密碼',
   ChangeEmail: '更改 E-mail',

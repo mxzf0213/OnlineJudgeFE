@@ -19,12 +19,13 @@
 
     <!--后台返info就显示出来， 权限控制放后台 -->
     <Col v-if="submission.info && !isCE" :span="20">
-      <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data"></Table>
+        <Table stripe :loading="loading" :disabled-hover="true" :columns="columns" :data="submission.info.data"></Table>
     </Col>
 
     <Col :span="20">
       <Highlight :code="submission.code" :language="submission.language" :border-color="status.color"></Highlight>
     </Col>
+
     <Col v-if="submission.can_unshare" :span="20">
       <div id="share-btn">
         <Button v-if="submission.shared"
@@ -35,6 +36,7 @@
                 type="primary" size="large" @click="shareSubmission(true)">
           Share
         </Button>
+        <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)">Test Case</Button>
       </div>
     </Col>
   </Row>
@@ -46,6 +48,8 @@
   import {JUDGE_STATUS} from '@/utils/constants'
   import utils from '@/utils/utils'
   import Highlight from '@/pages/oj/components/Highlight'
+  import expandRow from './table-expand.vue'
+  import { mapGetters } from 'vuex'
 
   const baseColumn = [
     {
@@ -99,6 +103,21 @@
     }
   ]
 
+  const expandColumn = [
+    {
+      type: 'expand',
+      width: 120,
+      align: 'center',
+      render: (h, params) => {
+        return h(expandRow, {
+          props: {
+            row: params.row
+          }
+        })
+      }
+    }
+  ]
+
   export default {
     name: 'submissionDetails',
     components: {
@@ -131,7 +150,13 @@
         api.getSubmission(this.$route.params.id).then(res => {
           this.loading = false
           let data = res.data.data
-          let columns = baseColumn
+          let columns
+          if (this.isAdminRole || data.contest == null) {
+            columns = expandColumn
+            columns = columns.concat(baseColumn)
+          } else {
+            columns = baseColumn
+          }
           if (data.info && data.info.data && !this.isConcat) {
             // score exist means the submission is OI problem submission
             if (data.info.data[0].score !== undefined) {
@@ -145,6 +170,11 @@
             this.columns = columns
           }
           this.submission = data
+          // console.log('sendStatement start!')
+          // console.log(this.user)
+          // eslint-disable-next-line no-undef
+          sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showCodeSubmission', 'http://showCodeSubmission', this.submission.id, 'http://submissionId')
+          // console.log('sendStatement success!')
         }, () => {
           this.loading = false
         })
@@ -156,6 +186,10 @@
           this.$success('Succeeded')
         }, () => {
         })
+      },
+      downloadTestCase (problemID) {
+        let url = '/admin/test_case?problem_id=' + problemID
+        utils.downloadFile(url)
       }
     },
     computed: {
@@ -171,7 +205,11 @@
       },
       isAdminRole () {
         return this.$store.getters.isAdminRole
-      }
+      },
+      singleSubtask () {
+        return this.submission.info.data.length === 1
+      },
+      ...mapGetters(['user'])
     }
   }
 </script>

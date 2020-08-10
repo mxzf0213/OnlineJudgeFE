@@ -21,6 +21,8 @@
   import utils from '@/utils/utils'
   import { RULE_TYPE } from '@/utils/constants'
 
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'acm-rank',
     components: {
@@ -153,6 +155,11 @@
     },
     mounted () {
       this.getRankData(1)
+      // console.log('sendStatement start!')
+      // console.log(this.user)
+      // eslint-disable-next-line no-undef
+      sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showCommonRank', 'http://showCommonRank', 'ACMCommon', 'http://ACMCommon')
+      // console.log('sendStatement success!')
     },
     methods: {
       getRankData (page) {
@@ -184,6 +191,9 @@
         this.options.series[0].data = acData
         this.options.series[1].data = totalData
       }
+    },
+    computed: {
+      ...mapGetters(['user'])
     }
   }
 </script>

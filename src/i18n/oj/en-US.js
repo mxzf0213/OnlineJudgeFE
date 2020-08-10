@@ -64,6 +64,7 @@ export const m = {
   Profile: 'Profile',
   Account: 'Account',
   Security: 'Security',
+  Performance: 'Performance',
   // AccoutSetting.vue
   ChangePassword: 'Change Password',
   ChangeEmail: 'Change Email',
