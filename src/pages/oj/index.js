@@ -9,7 +9,6 @@ import VueAnalytics from 'vue-analytics'
 import { GOOGLE_ANALYTICS_ID } from '@/utils/constants'
 
 import iView from 'iview'
-// import oView from 'oview'
 import locale from 'iview/dist/locale/en-US'
 import 'iview/dist/styles/iview.css'
 
@@ -22,7 +21,6 @@ import highlight from '@/plugins/highlight'
 import katex from '@/plugins/katex'
 import filters from '@/utils/filters.js'
 
-import ECharts from 'vue-echarts/components/ECharts.vue'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/pie'
@@ -41,7 +39,6 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 Vue.use(iView, {locale})
-// Vue.use(oView)
 Vue.use(VueClipboard)
 Vue.use(highlight)
 Vue.use(katex)
@@ -50,7 +47,6 @@ Vue.use(VueAnalytics, {
   router
 })
 
-Vue.component('ECharts', ECharts)
 Vue.component(VerticalMenu.name, VerticalMenu)
 Vue.component(VerticalMenuItem.name, VerticalMenuItem)
 Vue.component(Panel.name, Panel)

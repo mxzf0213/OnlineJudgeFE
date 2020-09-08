@@ -100,6 +100,7 @@
               shape="circle"
               class="tag-btn">{{tag.name}}
       </Button>
+
       <Button long id="pick-one" @click="pickone">
         <Icon type="shuffle"></Icon>
         Pick one

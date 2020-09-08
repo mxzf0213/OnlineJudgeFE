@@ -41,7 +41,8 @@
         <Modal
           v-model="modal10"
           title="Error prediction">
-          <Progress v-for="(predict,index) in errorPredictResults['name']" :percent="errorPredictResults['prob'][index] * 100.0">{{predict}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div v-if="1 == 2"></div>
+          <Progress v-for="(predict,index) in errorPredictResults['name']" :percent="errorPredictResults['prob'][index] * 100.0" :key="index">{{predict}}&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{Math.floor(errorPredictResults['prob'][index]*100.0 * 100.0) / 100.0}}%</Progress>
         </Modal>
       </div>
@@ -56,7 +57,6 @@
   import Highlight from '@/pages/oj/components/Highlight'
   import expandRow from './table-expand.vue'
   import { mapGetters } from 'vuex'
-  import axios from 'axios'
 
   const baseColumn = [
     {
@@ -281,6 +281,4 @@
     border: none;
     background: none;
   }
-
-
 </style>

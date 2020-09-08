@@ -14,7 +14,8 @@ import {
   ResetPassword,
   SubmissionDetails,
   SubmissionList,
-  UserHome
+  UserHome,
+  OauthLogin
 } from '../views'
 
 import * as Contest from '@oj/views/contest'
@@ -158,12 +159,6 @@ export default [
         path: 'security',
         meta: {requiresAuth: true, title: 'Security Settings'},
         component: Setting.SecuritySetting
-      },
-      {
-        name: 'performance-setting',
-        path: 'performance',
-        meta: {requiresAuth: true, title: 'Performance Settings'},
-        component: Setting.PerformanceSetting
       }
     ]
   },
@@ -183,5 +178,10 @@ export default [
     path: '*',
     meta: {title: '404'},
     component: NotFound
+  },
+  {
+    path: '/oauth',
+    name: 'oauth-login',
+    component: OauthLogin
   }
 ]

@@ -21,6 +21,13 @@ export default {
       data
     })
   },
+  oauthLogin (accessToken) {
+    return ajax('oauth', 'get', {
+      params: {
+        access_token: accessToken
+      }
+    })
+  },
   checkUsernameOrEmail (username, email) {
     return ajax('check_username_or_email', 'post', {
       data: {
