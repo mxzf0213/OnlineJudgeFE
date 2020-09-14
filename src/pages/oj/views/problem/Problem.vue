@@ -176,7 +176,6 @@
         </ul>
       </Card>
 
-<<<<<<< HEAD
       <Card id="recommendUser">
         <div slot="title" class="header">
           <Icon type="checkmark-circled"></Icon>
@@ -205,8 +204,6 @@
         </Button>
       </Card>
 
-=======
->>>>>>> oauth
       <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
         <div slot="title">
           <Icon type="ios-analytics"></Icon>
