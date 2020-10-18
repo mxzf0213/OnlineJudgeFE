@@ -175,12 +175,15 @@
           this.loading = false
           let data = res.data.data
           let columns
-          if (this.isAdminRole || data.contest == null) {
-            columns = expandColumn
-            columns = columns.concat(baseColumn)
-          } else {
-            columns = baseColumn
-          }
+          // if (this.isAdminRole || data.contest == null) {
+          //   columns = expandColumn
+          //   columns = columns.concat(baseColumn)
+          // } else {
+          //   columns = baseColumn
+          // }
+          // 现在是problems和考试都显示箭头，可以查看具体数据
+          columns = expandColumn
+          columns = columns.concat(baseColumn)
           if (data.info && data.info.data && !this.isConcat) {
             // score exist means the submission is OI problem submission
             if (data.info.data[0].score !== undefined) {

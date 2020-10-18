@@ -68,3 +68,7 @@ test.vue
 vendor-manifest.json
 vendor.dll*.js
 
+# exclude dist.zip and static/img
+*.zip
+static/img
+

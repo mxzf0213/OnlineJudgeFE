@@ -59,7 +59,7 @@
                 class="tag-btn">{{user}}
         </Button>
 
-        <Button long id="pick-one1" @click="pickone">
+        <Button long id="pick-one1" @click="pickRandomUser">
           <Icon type="shuffle"></Icon>
           Pick one
         </Button>
@@ -75,7 +75,7 @@
                 class="tag-btn">{{problem['title']}}
         </Button>
 
-        <Button long id="pick-one2" @click="pickone">
+        <Button long id="pick-one2" @click="pickRandomProblem">
           <Icon type="shuffle"></Icon>
           Pick one
         </Button>
@@ -355,6 +355,18 @@
           this.$success('Good Luck')
           this.$router.push({name: 'problem-details', params: {problemID: res.data.data}})
         })
+      },
+      pickRandomUser () {
+        let l = this.recommendList.user.length
+        let randNum = Math.floor(Math.random() * l)
+        let userName = this.recommendList.user[randNum]
+        this.pickUser(userName)
+      },
+      pickRandomProblem () {
+        let l = this.recommendList.problems_info.length
+        let randNum = Math.floor(Math.random() * l)
+        let randProblem = this.recommendList.problems_info[randNum]
+        this.pickProblem(randProblem['_id'], randProblem['contest_id'])
       }
     },
     computed: {
