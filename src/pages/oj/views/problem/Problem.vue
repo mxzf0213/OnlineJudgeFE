@@ -23,7 +23,7 @@
                      v-clipboard:success="onCopy"
                      v-clipboard:error="onCopyError">
                     <Icon type="clipboard"></Icon>
-                  </a>
+                  </a>r
                 </p>
                 <pre>{{sample.input}}</pre>
               </div>
@@ -176,37 +176,6 @@
         </ul>
       </Card>
 
-<<<<<<< HEAD
-      <Card id="recommendUser">
-        <div slot="title" class="header">
-          <Icon type="checkmark-circled"></Icon>
-          <span class="card-title">用户推荐</span>
-        </div>
-          <Button v-for="user in recommendList.user"
-                  @click="pickUser(user)"
-                  :key="user"
-                  type="ghost"
-                  shape="circle"
-                  class="tag-btn">{{user}}
-          </Button>
-      </Card>
-
-      <Card id="recommendProblems">
-        <div slot="title" class="header">
-          <Icon type="checkmark-circled"></Icon>
-          <span class="card-title">题目推荐</span>
-        </div>
-        <Button v-for="problem in recommendList.problems_info"
-        @click="pickProblem(problem['_id'], problem['contest_id'])"
-        :key="problem"
-        type="ghost"
-        shape="circle"
-        class="tag-btn">{{problem['title']}}
-        </Button>
-      </Card>
-
-=======
->>>>>>> oauth
       <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
         <div slot="title">
           <Icon type="ios-analytics"></Icon>
@@ -251,7 +220,6 @@
     mixins: [FormMixin],
     data () {
       return {
-        recommendList: [],
         statusVisible: false,
         captchaRequired: false,
         graphVisible: false,
@@ -306,7 +274,6 @@
     mounted () {
       this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {menu: false})
       this.init()
-      this.getRecommendList()
     },
     methods: {
       ...mapActions(['changeDomTitle']),
@@ -521,12 +488,6 @@
           sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showCommonProblemTags', 'http://showCommonProblemTags', this.problemID, 'http://commonProblemId')
         }
       },
-      getRecommendList () {
-        api.getRecommendList(this.getUserId(), 5, 7).then(res => {
-          this.recommendList = res.data.data
-        }, res => {}
-        )
-      },
       getUserId () {
         if (window.localStorage.getItem('userId')) {
           return window.localStorage.getItem('userId')
@@ -687,16 +648,6 @@
 
   .fl-right {
     float: right;
-  }
-
-  #recommendUser{
-    margin-bottom: 20px;
-    margin-top: 20px;
-  }
-
-  #recommendProblems{
-    margin-bottom: 20px;
-    margin-top: 20px;
   }
 
   #pieChart {

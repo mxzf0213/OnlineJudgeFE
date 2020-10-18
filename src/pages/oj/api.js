@@ -115,29 +115,6 @@ export default {
   getProblemTagList () {
     return ajax('problem/tags', 'get')
   },
-  getRecommendList (userId, userNum, problemNum) {
-    return ajax('recommend', 'get', {
-      params: {
-        user_id: userId,
-        user_number: userNum,
-        exercise_number: problemNum
-      }
-    })
-  },
-  getDktList (problemId) {
-    return ajax('dkt', 'get', {
-      params: {
-        problem_id: problemId
-      }
-    })
-  },
-  getCode2vecList (code) {
-    return ajax('code2vec', 'get', {
-      params: {
-        code: code
-      }
-    })
-  },
   getProblemList (offset, limit, searchParams) {
     let params = {
       paging: true,

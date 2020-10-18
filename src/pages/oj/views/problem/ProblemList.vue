@@ -49,46 +49,6 @@
     </Col>
 
     <Col :span="5">
-      <Panel :padding="10">
-        <div slot="title" class="taglist-title">用户推荐</div>
-        <Button v-for="user in recommendList.user"
-                @click="pickUser(user)"
-                :key="user"
-                type="ghost"
-                shape="circle"
-                class="tag-btn">{{user}}
-        </Button>
-
-        <Button long id="pick-one1" @click="pickone">
-          <Icon type="shuffle"></Icon>
-          Pick one
-        </Button>
-      </Panel>
-
-      <Panel :padding="10">
-        <div slot="title" class="taglist-title">题目推荐</div>
-        <Button v-for="problem in recommendList.problems_info"
-                @click="pickProblem(problem['_id'], problem['contest_id'])"
-                :key="problem"
-                type="ghost"
-                shape="circle"
-                class="tag-btn">{{problem['title']}}
-        </Button>
-
-        <Button long id="pick-one2" @click="pickone">
-          <Icon type="shuffle"></Icon>
-          Pick one
-        </Button>
-      </Panel>
-
-      <Panel :padding="10">
-        <div slot="title" class="taglist-title">知识点掌握</div>
-        <p v-for="(prob, index) in knowledgeList['res']">
-          {{knowledgeList['name'][index]}}
-        <Progress :percent="prob * 100.0" hide-info>
-        </Progress>
-        </p>
-      </Panel>
 
     <Panel :padding="10">
       <div slot="title" class="taglist-title">Tags</div>
@@ -369,8 +329,6 @@
       'isAuthenticated' (newVal) {
         if (newVal === true) {
           this.init()
-          this.getRecommendList()
-          this.getKnowledgeList()
         }
       }
     }

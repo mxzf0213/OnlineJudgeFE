@@ -37,14 +37,6 @@
           Share
         </Button>
         <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)">Test Case</Button>
-        <Button size="large" type="primary" @click="predict()" v-if="submission.info && !isCE && !isAC && isCLang" v-bind:disabled="predictButton">代码错误预测</Button>
-        <Modal
-          v-model="modal10"
-          title="Error prediction">
-          <div v-if="1 == 2"></div>
-          <Progress v-for="(predict,index) in errorPredictResults['name']" :percent="errorPredictResults['prob'][index] * 100.0" :key="index">{{predict}}&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{Math.floor(errorPredictResults['prob'][index]*100.0 * 100.0) / 100.0}}%</Progress>
-        </Modal>
       </div>
     </Col>
   </Row>
@@ -132,8 +124,6 @@
     },
     data () {
       return {
-        predictButton: false,
-        errorPredictResults: [],
         modal10: false,
         columns: [],
         submission: {
@@ -155,20 +145,6 @@
       this.getSubmission()
     },
     methods: {
-      predict () {
-        this.predictButton = true
-        this.$Message.info('正在预测，请等待')
-        api.getCode2vecList(this.submission.code).then(
-          res => {
-            const result = res.data.data
-            this.errorPredictResults = result
-            this.modal10 = true
-            this.predictButton = false
-          }, res => {
-          console.log('请求失败')
-        }
-        )
-      },
       getSubmission () {
         this.loading = true
         api.getSubmission(this.$route.params.id).then(res => {
