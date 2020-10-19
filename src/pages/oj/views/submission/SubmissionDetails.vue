@@ -38,12 +38,27 @@
         </Button>
         <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)">Test Case</Button>
         <Button size="large" type="primary" @click="predict()" v-if="submission.info && !isCE && !isAC && isCLang" v-bind:disabled="predictButton">代码错误预测</Button>
+        <Button size="large" type="primary" @click="modal11 = true">标注错误</Button>
         <Modal
           v-model="modal10"
           title="Error prediction">
           <div v-if="1 == 2"></div>
           <Progress v-for="(predict,index) in errorPredictResults['name']" :percent="errorPredictResults['prob'][index] * 100.0" :key="index">{{predict}}&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{Math.floor(errorPredictResults['prob'][index]*100.0 * 100.0) / 100.0}}%</Progress>
+        </Modal>
+        <Modal
+          v-model="modal11"
+          title="Annotation error"
+          @on-ok="handleUploadErrorAnnotation">
+          <div v-if="1 == 2"></div>
+          <CheckboxGroup v-model="errors">
+              <Row v-for="(error, id) in showErrors" :key="id">
+                <Checkbox :label="error" ></Checkbox>
+              </Row>
+          </CheckboxGroup>
+          <Checkbox @on-change="handleOtherErrorCheck">
+            <Input v-model="otherError" placeholder="请输入其它错误" style="width: 300px" />
+          </Checkbox>
         </Modal>
       </div>
     </Col>
@@ -135,6 +150,7 @@
         predictButton: false,
         errorPredictResults: [],
         modal10: false,
+        modal11: false,
         columns: [],
         submission: {
           result: '0',
@@ -148,7 +164,11 @@
           }
         },
         isConcat: false,
-        loading: false
+        loading: false,
+        showErrors: [ '循环错误', '输出格式未按要求', '运算符错误', '缺少输出', '输入字符串错误', '逻辑错误', '输入变量错误', '初始化错误', '类型使用错误', '类型运算精度问题', '判断错误' ],
+        errors: [],
+        otherError: '',
+        isOtherErrorChecked: false
       }
     },
     mounted () {
@@ -160,6 +180,7 @@
         this.$Message.info('正在预测，请等待')
         api.getCode2vecList(this.submission.code).then(
           res => {
+            console.log(res)
             const result = res.data.data
             this.errorPredictResults = result
             this.modal10 = true
@@ -217,6 +238,20 @@
       downloadTestCase (problemID) {
         let url = '/admin/test_case?problem_id=' + problemID
         utils.downloadFile(url)
+      },
+      handleOtherErrorCheck (value) {
+        this.isOtherErrorChecked = value
+      },
+      handleUploadErrorAnnotation () {
+        let errors = this.errors
+        if (this.isOtherErrorChecked) {
+          errors.push(this.otherError)
+        }
+        api.saveErrorAnnotation(this.$route.params.id, errors).then(res => {
+          this.$Message.success('标注成功')
+        }, res => {
+          console.log('请求失败')
+        })
       }
     },
     computed: {

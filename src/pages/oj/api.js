@@ -138,6 +138,14 @@ export default {
       }
     })
   },
+  saveErrorAnnotation (submissionId, errors) {
+    return ajax('annotationError', 'post', {
+      data: {
+        id: submissionId,
+        tags: errors
+      }
+    })
+  },
   getProblemList (offset, limit, searchParams) {
     let params = {
       paging: true,
