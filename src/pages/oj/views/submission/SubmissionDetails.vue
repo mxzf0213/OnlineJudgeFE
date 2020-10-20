@@ -57,7 +57,7 @@
                 <Checkbox :label="error" ></Checkbox>
               </Row>
           </CheckboxGroup>
-          <Checkbox @on-change="handleOtherErrorCheck">
+          <Checkbox v-model="isOtherErrorChecked" ref="otherErrorCheckbox">
             <Input v-model="otherError" placeholder="请输入其它错误" style="width: 300px" />
           </Checkbox>
         </Modal>
@@ -239,9 +239,6 @@
       downloadTestCase (problemID) {
         let url = '/admin/test_case?problem_id=' + problemID
         utils.downloadFile(url)
-      },
-      handleOtherErrorCheck (value) {
-        this.isOtherErrorChecked = value
       },
       handleUploadErrorAnnotation () {
         let errors = this.errors
