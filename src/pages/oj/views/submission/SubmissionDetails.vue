@@ -49,7 +49,8 @@
         <Modal
           v-model="modal11"
           title="Annotation error"
-          @on-ok="handleUploadErrorAnnotation">
+          @on-ok="handleUploadErrorAnnotation"
+          @on-cancel="handleCloseErrorAnnotation">
           <div v-if="1 == 2"></div>
           <CheckboxGroup v-model="errors">
               <Row v-for="(error, id) in showErrors" :key="id">
@@ -249,9 +250,15 @@
         }
         api.saveErrorAnnotation(this.$route.params.id, errors).then(res => {
           this.$Message.success('标注成功')
+          this.handleCloseErrorAnnotation()
         }, res => {
           console.log('请求失败')
         })
+      },
+      handleCloseErrorAnnotation () {
+        this.errors = []
+        this.isOtherErrorChecked = false
+        this.otherError = ''
       }
     },
     computed: {
