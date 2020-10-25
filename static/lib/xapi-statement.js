@@ -1,6 +1,8 @@
 const sendStatement = async (username, mail, verb, verbId, object, objectId) => {
   const xapiEndpoint = 'http://106.75.216.44/data/xAPI/statements';
   const xapiAuth = 'Basic MzhjYTRhNjEyNDY2Y2MyYzY2NGUyZGQ0NGU4YzQzNjc5ODRiYmRjMjoxYTg2NzY0ODU0ZTM0MGU4YmNhYTM5YmQ3OTY0YTVjMjJmYjFkNGQ1';
+  var reg =/[\u4e00-\u9fa5]/g;
+  mail = mail.replace(reg, '');
   var statement = {
     'actor': {
       'name': username,
