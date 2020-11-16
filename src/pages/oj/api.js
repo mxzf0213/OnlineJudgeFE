@@ -146,6 +146,13 @@ export default {
       }
     })
   },
+  getErrorAnnotation (submissionId) {
+    return ajax('getAnnotationError', 'get', {
+      params: {
+        id: submissionId
+      }
+    })
+  },
   getProblemList (offset, limit, searchParams) {
     let params = {
       paging: true,
