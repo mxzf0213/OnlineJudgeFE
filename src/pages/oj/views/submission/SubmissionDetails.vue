@@ -38,7 +38,7 @@
         </Button>
         <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)">Test Case</Button>
         <Button size="large" type="primary" @click="predict()" v-if="submission.info && !isCE && !isAC && isCLang" v-bind:disabled="predictButton">代码错误预测</Button>
-        <Button size="large" type="primary" @click="modal11 = true">标注错误</Button>
+        <Button size="large" type="primary" @click="handleShowErrorAnnotation()">标注错误</Button>
         <Modal
           v-model="modal10"
           title="Error prediction">
@@ -60,6 +60,16 @@
           <Checkbox v-model="isOtherErrorChecked" ref="otherErrorCheckbox">
             <Input v-model="otherError" placeholder="请输入其它错误" style="width: 300px" />
           </Checkbox>
+        </Modal>
+        <Modal
+          v-model="modal12"
+          title="Annotation error"
+          @on-cancel="modal12 = false">
+            <p v-for="(error, id) in perErrors" :key="id">{{ error.name }}</p>
+            <div slot="footer">
+              <Button type="text" size="large" @click="modal12 = false;modal11 = true">重新标注</Button>
+              <Button  type="primary" size="large" @click="modal12 = false">确定</Button>
+            </div>
         </Modal>
       </div>
     </Col>
@@ -152,6 +162,7 @@
         errorPredictResults: [],
         modal10: false,
         modal11: false,
+        modal12: false,
         columns: [],
         submission: {
           result: '0',
@@ -169,7 +180,8 @@
         showErrors: [ '循环错误', '输出格式未按要求', '运算符错误', '缺少输出', '输入字符串错误', '逻辑错误', '输入变量错误', '初始化错误', '类型使用错误', '类型运算精度问题', '判断错误' ],
         errors: [],
         otherError: '',
-        isOtherErrorChecked: false
+        isOtherErrorChecked: false,
+        perErrors: []
       }
     },
     mounted () {
@@ -224,6 +236,7 @@
           // eslint-disable-next-line no-undef
           sendStatement(this.user.username ? this.user.username : 'null', this.user.email ? this.user.email : 'null@null.com', 'showCodeSubmission', 'http://showCodeSubmission', this.submission.id, 'http://submissionId')
           // console.log('sendStatement success!')
+          this.handleGetErrorAnnotation()
         }, () => {
           this.loading = false
         })
@@ -240,6 +253,13 @@
         let url = '/admin/test_case?problem_id=' + problemID
         utils.downloadFile(url)
       },
+      handleShowErrorAnnotation () {
+        if (this.perErrors.length === 0) {
+          this.modal11 = true
+        } else {
+          this.modal12 = true
+        }
+      },
       handleUploadErrorAnnotation () {
         let errors = this.errors
         if (this.isOtherErrorChecked) {
@@ -248,6 +268,7 @@
         api.saveErrorAnnotation(this.$route.params.id, errors).then(res => {
           this.$Message.success('标注成功')
           this.handleCloseErrorAnnotation()
+          this.handleGetErrorAnnotation()
         }, res => {
           console.log('请求失败')
         })
@@ -256,6 +277,13 @@
         this.errors = []
         this.isOtherErrorChecked = false
         this.otherError = ''
+      },
+      handleGetErrorAnnotation () {
+        api.getErrorAnnotation(this.$route.params.id).then(res => {
+          this.perErrors = res.data.data
+        }).catch(err => {
+          console.log('标注信息请求失败:' + err.data)
+        })
       }
     },
     computed: {
