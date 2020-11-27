@@ -58,6 +58,17 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="Show Case"
+          width="130">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.show_case"
+                       active-text=""
+                       inactive-text=""
+                       @change="handleShowCaseSwitch(scope.row)">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column
           width="100"
           label="Visible">
           <template slot-scope="scope">
@@ -166,6 +177,9 @@
         this.$router.push({name: 'contest-problem-list', params: {contestId}})
       },
       handleVisibleSwitch (row) {
+        api.editContest(row)
+      },
+      handleShowCaseSwitch (row) {
         api.editContest(row)
       }
     },

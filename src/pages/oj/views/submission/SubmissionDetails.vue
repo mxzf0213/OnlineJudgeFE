@@ -36,7 +36,7 @@
                 type="primary" size="large" @click="shareSubmission(true)">
           Share
         </Button>
-        <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)">Test Case</Button>
+        <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)" :disabled="!submission.show_case">Test Case</Button>
         <Button size="large" type="primary" @click="predict()" v-if="submission.info && !isCE && !isAC && isCLang" v-bind:disabled="predictButton">代码错误预测</Button>
         <Button size="large" type="primary" @click="handleShowErrorAnnotation()">标注错误</Button>
         <Modal
