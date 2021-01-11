@@ -176,7 +176,7 @@
         </ul>
       </Card>
 
-      <Card id="recommendUser">
+      <Card id="recommendUser" v-if="recommendList.user">
         <div slot="title" class="header">
           <Icon type="checkmark-circled"></Icon>
           <span class="card-title">用户推荐</span>
@@ -190,7 +190,7 @@
           </Button>
       </Card>
 
-      <Card id="recommendProblems">
+      <Card id="recommendProblems" v-if="recommendList.problems_info">
         <div slot="title" class="header">
           <Icon type="checkmark-circled"></Icon>
           <span class="card-title">题目推荐</span>
@@ -519,17 +519,17 @@
         }
       },
       getRecommendList () {
-        api.getRecommendList(this.getUserId(), 5, 7).then(res => {
-          this.recommendList = res.data.data
-        }, res => {}
-        )
+        var userId = this.getUserId()
+        if (userId) {
+          api.getRecommendList(this.getUserId(), 5, 7).then(res => { this.recommendList = res.data.data }, res => {})
+        }
       },
       getUserId () {
-        if (window.localStorage.getItem('userId')) {
-          return window.localStorage.getItem('userId')
-        }
+        // if (window.localStorage.getItem('userId')) {
+        //   return window.localStorage.getItem('userId')
+        // }
         var res = this.user.id
-        window.localStorage.setItem('userId', this.user.id)
+        // window.localStorage.setItem('userId', this.user.id)
         return res
       },
       pickUser (userName) {

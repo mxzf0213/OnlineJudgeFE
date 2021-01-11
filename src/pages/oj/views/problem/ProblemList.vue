@@ -49,7 +49,8 @@
     </Col>
 
     <Col :span="5">
-      <Panel :padding="10">
+      <Panel :padding="10" v-if="recommendList.user">
+<!--      <Panel :padding="10">-->
         <div slot="title" class="taglist-title">用户推荐</div>
         <Button v-for="user in recommendList.user"
                 @click="pickUser(user)"
@@ -65,7 +66,8 @@
         </Button>
       </Panel>
 
-      <Panel :padding="10">
+      <Panel :padding="10" v-if="recommendList.problems_info">
+<!--      <Panel :padding="10">-->
         <div slot="title" class="taglist-title">题目推荐</div>
         <Button v-for="problem in recommendList.problems_info"
                 @click="pickProblem(problem['_id'], problem['contest_id'])"
@@ -81,7 +83,8 @@
         </Button>
       </Panel>
 
-      <Panel :padding="10">
+      <Panel :padding="10" v-if="knowledgeList['res']">
+<!--        <Panel :padding="10"    >-->
         <div slot="title" class="taglist-title">知识点掌握</div>
         <p v-for="(prob, index) in knowledgeList['res']">
           {{knowledgeList['name'][index]}}
@@ -234,11 +237,11 @@
     },
     methods: {
       getUserId () {
-        if (window.localStorage.getItem('userId')) {
-          return window.localStorage.getItem('userId')
-        }
+        // if (window.localStorage.getItem('userId')) {
+        //   return window.localStorage.getItem('userId')
+        // }
         var res = this.user.id
-        window.localStorage.setItem('userId', this.user.id)
+        // window.localStorage.setItem('userId', this.user.id)
         return res
       },
       init (simulate = false) {
@@ -285,15 +288,19 @@
         })
       },
       getRecommendList () {
-        api.getRecommendList(this.getUserId(), 5, 7).then(res => {
-          this.recommendList = res.data.data
-        }, res => {}
-        )
+        var userId = this.getUserId()
+        if (userId) {
+          api.getRecommendList(userId, 5, 7).then(res => { this.recommendList = res.data.data }, res => {}
+          )
+        }
       },
       getKnowledgeList () {
-        api.getDktList(1).then(res => {
-          this.knowledgeList = res.data.data
-        })
+        var userId = this.getUserId()
+        if (userId) {
+          api.getDktList(1).then(res => {
+            this.knowledgeList = res.data.data
+          })
+        }
       },
       pickUser (userName) {
         this.$router.push({name: 'user-home', query: {username: userName}})

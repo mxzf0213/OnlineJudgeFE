@@ -36,7 +36,7 @@
                 type="primary" size="large" @click="shareSubmission(true)">
           Share
         </Button>
-        <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)" :disabled="!submission.show_case">Test Case</Button>
+        <Button size="large" icon="ios-download-outline" type="primary" @click.native="downloadTestCase(submission.problem)" v-if="submission.show_case">Test Case</Button>
         <Button size="large" type="primary" @click="predict()" v-if="submission.info && !isCE && !isAC && isCLang" v-bind:disabled="predictButton">代码错误预测</Button>
         <Button size="large" type="primary" @click="handleShowErrorAnnotation()">标注错误</Button>
         <Modal
@@ -209,15 +209,12 @@
           this.loading = false
           let data = res.data.data
           let columns
-          // if (this.isAdminRole || data.contest == null) {
-          //   columns = expandColumn
-          //   columns = columns.concat(baseColumn)
-          // } else {
-          //   columns = baseColumn
-          // }
-          // 现在是problems和考试都显示箭头，可以查看具体数据
-          columns = expandColumn
-          columns = columns.concat(baseColumn)
+          if (this.isAdminRole || data.show_case) {
+            columns = expandColumn
+            columns = columns.concat(baseColumn)
+          } else {
+            columns = baseColumn
+          }
           if (data.info && data.info.data && !this.isConcat) {
             // score exist means the submission is OI problem submission
             if (data.info.data[0].score !== undefined) {
