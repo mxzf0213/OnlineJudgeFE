@@ -176,6 +176,22 @@
         </ul>
       </Card>
 
+      <Card id="lastSubmissions" v-if="true">
+        <div slot="title">
+          <Icon type="ios-analytics"></Icon>
+          <span class="card-title">历史提交</span>
+          <Button type="ghost" size="small" id="detail" @click="handleRoute('../status?myself=1&username=' + user.username + '&problemID=' + problemID)">More</Button>
+        </div>
+        <ul>
+          <li v-for="(submission, index) in lastSubmissions" :key="index">
+            <router-link :to="'../status/' + submission.id">
+              <p><Tag :color="getStatusTextColor(submission.result)">{{ mapToResult(submission.result) }}</Tag></p>
+              <p>{{ changeUtcTime(submission.create_time) }}</p>
+            </router-link>
+          </li>
+        </ul>
+      </Card>
+
       <Card id="recommendUser" v-if="recommendList.user">
         <div slot="title" class="header">
           <Icon type="checkmark-circled"></Icon>
@@ -236,6 +252,7 @@
   import {JUDGE_STATUS, CONTEST_STATUS, buildProblemCodeKey} from '@/utils/constants'
   import api from '@oj/api'
   import {pie, largePie} from './chartData'
+  import time from '@/utils/time'
 
   // 只显示这些状态的图形占用
   const filtedStatus = ['-1', '-2', '0', '1', '2', '3', '4', '8']
@@ -285,7 +302,8 @@
         largePieInitOpts: {
           width: '500',
           height: '480'
-        }
+        },
+        lastSubmissions: []
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -304,6 +322,7 @@
       this.$store.commit(types.CHANGE_CONTEST_ITEM_VISIBLE, {menu: false})
       this.init()
       this.getRecommendList()
+      this.getLastSubmission()
     },
     methods: {
       ...mapActions(['changeDomTitle']),
@@ -469,6 +488,7 @@
             // console.log('sendSubmitStatement success!')
             this.submitted = true
             this.checkSubmissionStatus()
+            this.getLastSubmission()
           }, res => {
             this.getCaptchaSrc()
             if (res.data.data.startsWith('Captcha is required')) {
@@ -547,6 +567,23 @@
             }
           })
         }
+      },
+      getLastSubmission () {
+        api.getSubmissionList(0, 10, { username: this.user.username, myself: true, problem_id: this.problemID }).then(res => {
+          this.lastSubmissions = res.data.data.results
+          console.log(this.lastSubmissions)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      changeUtcTime (tt) {
+        return time.utcToLocal(tt).substr(time.utcToLocal(tt).indexOf('-') + 1)
+      },
+      mapToResult (resultCode) {
+        return JUDGE_STATUS[resultCode].name
+      },
+      getStatusTextColor (resultCode) {
+        return JUDGE_STATUS[resultCode].color
       }
     },
     computed: {
@@ -718,5 +755,31 @@
     margin-right: 5px;
     margin-bottom: 10px;
   }
+
+  #lastSubmissions {
+    margin-top: 20px;
+    ul {
+      list-style-type: none;
+      li {
+        border-bottom: 1px dotted #e9eaec;
+        margin-bottom: 10px;
+        a{
+          text-decoration: none;
+        }
+        p {
+          display: inline-block;
+          color:black;
+        }
+        p:first-child {
+          width: auto;
+        }
+        p:last-child {
+          float: right;
+        }
+      }
+    }
+  }
+
+
 </style>
 
