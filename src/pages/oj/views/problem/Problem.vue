@@ -260,7 +260,7 @@
         submitting: false,
         code: '',
         language: 'C++',
-        theme: 'solarized',
+        theme: 'material',
         submissionId: '',
         submitted: false,
         result: {
