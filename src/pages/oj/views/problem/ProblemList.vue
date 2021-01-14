@@ -47,8 +47,28 @@
     </Panel>
     <Pagination :total="total" :page-size="limit" @on-change="pushRouter" :current.sync="query.page"></Pagination>
     </Col>
-
     <Col :span="5">
+     <Panel :padding="10" id="lastSubmissions">
+        <div slot="title" class="taglist-title">历史提交
+          <Button type="ghost" size="small" id="detail" class="moreBtn" @click="handleRoute('../status?myself=1&username=' + user.username)">More</Button>
+        </div>
+        
+        <ul>
+          <li>
+            <p>题目</p>
+            <p>status</p>
+            <p>提交时间</p>
+          </li>
+          <li v-for="(submission, index) in lastSubmissions" :key="index">
+            <router-link :to="'../status/' + submission.id">
+              <p>{{ submission.problem }}</p>
+              <Tag :color="getStatusTextColor(submission.result)">{{ mapToResult(submission.result) }}</Tag>
+              <p>{{ changeUtcTime(submission.create_time) }}</p>
+            </router-link>
+          </li>
+        </ul>
+      </Panel>
+
       <Panel :padding="10" v-if="recommendList.user">
 <!--      <Panel :padding="10">-->
         <div slot="title" class="taglist-title">用户推荐</div>
@@ -86,7 +106,7 @@
       <Panel :padding="10" v-if="knowledgeList['res']">
 <!--        <Panel :padding="10"    >-->
         <div slot="title" class="taglist-title">知识点掌握</div>
-        <p v-for="(prob, index) in knowledgeList['res']">
+        <p v-for="(prob, index) in knowledgeList['res']" :key="index">
           {{knowledgeList['name'][index]}}
         <Progress :percent="prob * 100.0" hide-info>
         </Progress>
@@ -109,6 +129,7 @@
         Pick one
       </Button>
     </Panel>
+     
 
     <Spin v-if="loadings.tag" fix size="large"></Spin>
     </Col>
@@ -121,7 +142,8 @@
   import utils from '@/utils/utils'
   import { ProblemMixin } from '@oj/components/mixins'
   import Pagination from '@oj/components/Pagination'
-
+  import time from '@/utils/time'
+  import { JUDGE_STATUS } from '@/utils/constants'
   export default {
     name: 'ProblemList',
     mixins: [ProblemMixin],
@@ -227,13 +249,15 @@
           difficulty: '',
           tag: '',
           page: 1
-        }
+        },
+        lastSubmissions: []
       }
     },
     mounted () {
       this.init()
       this.getRecommendList()
       this.getKnowledgeList()
+      this.getLastSubmission()
     },
     methods: {
       getUserId () {
@@ -354,6 +378,9 @@
           this.problemTableColumns.splice(this.problemTableColumns.length - 1, 1)
         }
       },
+      handleRoute (route) {
+        this.$router.push(route)
+      },
       onReset () {
         this.$router.push({name: 'problem-list'})
       },
@@ -374,6 +401,23 @@
         let randNum = Math.floor(Math.random() * l)
         let randProblem = this.recommendList.problems_info[randNum]
         this.pickProblem(randProblem['_id'], randProblem['contest_id'])
+      },
+      getLastSubmission () {
+        api.getSubmissionList(0, 10, { username: this.user.username, myself: true }).then(res => {
+          this.lastSubmissions = res.data.data.results
+          console.log(this.lastSubmissions)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      changeUtcTime (tt) {
+        return time.utcToLocal(tt)
+      },
+      mapToResult (resultCode) {
+        return JUDGE_STATUS[resultCode].name
+      },
+      getStatusTextColor (resultCode) {
+        return JUDGE_STATUS[resultCode].color
       }
     },
     computed: {
@@ -409,5 +453,30 @@
 
   #pick-one {
     margin-top: 10px;
+  }
+
+  #lastSubmissions {
+    margin-top: 20px;
+    ul {
+      list-style-type: none;
+      li {
+        border-bottom: 1px dotted #e9eaec;
+        margin-bottom: 10px;
+        
+        p {
+          display: inline-block;
+          color:black;
+        }
+        p:first-child {
+          width: 70px;
+        }
+        p:last-child {
+          float: right;
+        }
+      }
+    }
+  }
+  .moreBtn{
+    float: right;
   }
 </style>
