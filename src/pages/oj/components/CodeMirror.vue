@@ -85,6 +85,10 @@
   import 'codemirror/addon/display/fullscreen.css'
   import 'codemirror/addon/comment/continuecomment'
 
+  import langKeyWords from './langKeywords/keywords'
+
+  var modeKeyWords = ''
+
   CodeMirror.registerHelper('hint', 'fromList', function (cm, options) {
     var cur = cm.getCursor()
     var token = cm.getTokenAt(cur)
@@ -117,7 +121,7 @@
 
   function hintingFunction (cm, options) {
     // mode中的关键词
-    options.words = cm.getHelper(cm.getCursor(), 'hintWords')
+    options.words = modeKeyWords
     // 输入文本中的关键词
     const anyhint = CodeMirror.hint.anyword(cm, options)
     var modehint = CodeMirror.hint.fromList(cm, options)
@@ -134,6 +138,15 @@
         to: anyhint.to
       }
     }
+  }
+
+  function updateModeKeyWords (editor, lang) {
+    var keywords = []
+    for (let type in langKeyWords[lang]) {
+      keywords = keywords.concat(langKeyWords[lang][type])
+    }
+    keywords = keywords.concat(editor.getHelper(editor.getCursor(), 'hintWords'))
+    modeKeyWords = Array.from(new Set(keywords))
   }
 
   export default {
@@ -218,6 +231,7 @@
         this.mode = mode
         this.editor.setOption('mode', this.mode[this.language])
       })
+      updateModeKeyWords(this.editor, this.language)
       this.editor.focus()
       this.editor.on('inputRead', function onChange (editor, input) {
         var token = /\w/
@@ -234,6 +248,7 @@
       },
       onLangChange (newVal) {
         this.editor.setOption('mode', this.mode[newVal])
+        updateModeKeyWords(this.editor, newVal)
         this.$emit('changeLang', newVal)
       },
       onThemeChange (newTheme) {

@@ -52,7 +52,7 @@
         <div slot="title" class="taglist-title">历史提交
           <Button type="ghost" size="small" id="detail" class="moreBtn" @click="handleRoute('../status?myself=1&username=' + user.username)">More</Button>
         </div>
-        
+
         <ul>
           <li>
             <p>题目</p>
@@ -129,7 +129,7 @@
         Pick one
       </Button>
     </Panel>
-     
+
 
     <Spin v-if="loadings.tag" fix size="large"></Spin>
     </Col>
@@ -405,7 +405,7 @@
       getLastSubmission () {
         api.getSubmissionList(0, 10, { username: this.user.username, myself: true }).then(res => {
           this.lastSubmissions = res.data.data.results
-          console.log(this.lastSubmissions)
+          // console.log(this.lastSubmissions)
         }).catch(err => {
           console.log(err)
         })
@@ -462,7 +462,7 @@
       li {
         border-bottom: 1px dotted #e9eaec;
         margin-bottom: 10px;
-        
+
         p {
           display: inline-block;
           color:black;

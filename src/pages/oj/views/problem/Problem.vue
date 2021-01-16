@@ -276,7 +276,7 @@
         problemID: '',
         submitting: false,
         code: '',
-        language: 'C++',
+        language: 'C',
         theme: 'material',
         submissionId: '',
         submitted: false,
@@ -571,7 +571,7 @@
       getLastSubmission () {
         api.getSubmissionList(0, 10, { username: this.user.username, myself: true, problem_id: this.problemID }).then(res => {
           this.lastSubmissions = res.data.data.results
-          console.log(this.lastSubmissions)
+          // console.log(this.lastSubmissions)
         }).catch(err => {
           console.log(err)
         })
