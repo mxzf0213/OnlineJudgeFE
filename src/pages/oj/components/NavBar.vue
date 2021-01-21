@@ -135,7 +135,7 @@
     left: 0;
     height: 60px;
     width: 100%;
-    z-index: 1000;
+    z-index: 9;
     background-color: #fff;
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
     .oj-menu {

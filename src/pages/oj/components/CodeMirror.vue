@@ -305,27 +305,26 @@
   }
 </style>
 
-<style>
-  .CodeMirror {
-    height: auto !important;
-  }
-  .CodeMirror-scroll {
-    min-height: 300px;
-    max-height: 1000px;
-  }
-  .CodeMirror-fullscreen {
-    position: fixed!important;
-    top: 0; left: 0; right: 0; bottom: 0;
-    height: auto;
-    z-index: 9999;
-  }
-  .CodeMirror-hints {
-    z-index: 9999;
-  }
-
-  .cm-matchhighlight {
-    color: white !important;
-    background-color: red;
-  }
-  .CodeMirror-selection-highlight-scrollbar {background-color: red}
+<style lang="less">
+.CodeMirror {
+  height: auto !important;
+}
+.CodeMirror-scroll {
+  min-height: 300px;
+  max-height: 1000px;
+}
+.CodeMirror-fullscreen {
+  position: fixed!important;
+  top: 0; left: 0; right: 0; bottom: 0;
+  height: auto;
+  z-index: 9999;
+}
+.CodeMirror-hints {
+  z-index: 9999;
+}
+.cm-matchhighlight {
+  color: white !important;
+  background-color: red;
+}
+.CodeMirror-selection-highlight-scrollbar {background-color: red}
 </style>

@@ -520,6 +520,20 @@
         } else {
           submitFunc(data, true)
         }
+
+        let mayuanData = {
+          problem_id: this.problem._id,
+          problem_name: this.problem.title,
+          contest_id: this.contestID,
+          judge_id: this.submissionId,
+          judge_status: this.submissionStatus.text,
+          code: this.code
+        }
+        api.uploadCode(mayuanData).then(res => {
+          // console.log('upload code success')
+        }, res => {
+          // console.log('upload code failed')
+        })
       },
       onCopy (event) {
         this.$success('Code copied')

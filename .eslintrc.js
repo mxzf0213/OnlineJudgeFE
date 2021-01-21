@@ -23,5 +23,14 @@ module.exports = {
       "skipTemplates": true
     }],
     "no-unused-vars": ["warn"]
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "arguments": true,
+    "window": true,
+    "Promise": true
   }
 }

@@ -243,6 +243,11 @@ export default {
       data
     })
   },
+  uploadCode (data) {
+    return ajax('storeSubmission', 'post', {
+      data
+    })
+  },
   getSubmissionList (offset, limit, params) {
     params.limit = limit
     params.offset = offset
