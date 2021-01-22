@@ -110,8 +110,9 @@
         <div class="subbox_left">
           <h3>Test Case:</h3>
           <Input v-model="testCase" type="textarea" :autosize="{minRows: 15,maxRows: 15}" placeholder="Enter the case you want to test" />
-          <Button type="primary" style="margin-top:10px;float:left;" @click="submitSelftest">
-              <span>Run</span>
+          <Button :loading="selftestloading" type="primary" style="margin-top:10px;float:left;" @click="submitSelftest">
+              <span v-if="selftestloading">Running</span>
+              <span v-else>Run it !</span>
           </Button>
         </div>
         <div class="subbox_right">
@@ -200,7 +201,8 @@
         <div slot="title">
           <Icon type="ios-analytics"></Icon>
           <span class="card-title">历史提交</span>
-          <Button type="ghost" size="small" id="detail" @click="handleRoute('../status?myself=1&username=' + user.username + '&problemID=' + problemID)">More</Button>
+          <Button v-if="this.contestID" type="ghost" size="small" id="detail" @click="handleRoute('/contest/' + contestID + '/submissions?myself=1&page=1&contestID=' + contestID)">More</Button>
+          <Button v-else type="ghost" size="small" id="detail" @click="handleRoute('../status?myself=1&username=' + user.username + '&problemID=' + problemID)">More</Button>
         </div>
         <ul>
           <li v-for="(submission, index) in lastSubmissions" :key="index">
@@ -327,7 +329,8 @@
         testCase: '',
         testOutput: '',
         selftestOpened: false,
-        refreshSelftestStatus: false
+        refreshSelftestStatus: false,
+        selftestloading: false
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -644,9 +647,14 @@
         const checkStatus = () => {
           api.getSelftestResult().then(res => {
             console.log(res)
-            if (res.data.data.status !== 6) {
-              this.testOutput = res.data.data.output[0].output
+            if (res.data.data.status < 6) {
+              if (res.data.data.status !== 0) {
+                this.testOutput = JUDGE_STATUS[res.data.data.status].name + '\n\n\n' + res.data.data.info.err_info
+              } else {
+                this.testOutput = res.data.data.output[0].output
+              }
               clearTimeout(this.refreshSelftestStatus)
+              this.selftestloading = false
             } else {
               this.refreshSelftestStatus = setTimeout(checkStatus, 2000)
             }
@@ -669,7 +677,7 @@
             output: ''
           }]
         }
-        console.log(data)
+        this.selftestloading = true
         api.selftest(data).then(res => {
           this.checkSelftestStatus()
         }).catch(err => {
