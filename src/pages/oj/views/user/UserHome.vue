@@ -2,7 +2,7 @@
   <div class="container">
     <div class="avatar-container">
       <img class="avatar" :src="profile.avatar"/>
-      <p v-show="this.ifUserPortrait()"> <tag color="blue"> {{labels[0]}} </tag> <tag color="blue">{{labels[1]}}</tag> <tag color="blue">{{labels[2]}}</tag> <tag color="blue">{{labels[3]}}</tag><tag color="blue"> {{labels[4]}} </tag> <tag color="blue">{{labels[5]}}</tag> <tag color="blue">{{labels[6]}}</tag> <tag color="blue">{{labels[7]}}</tag></p>
+      <p v-show="false"> <tag color="blue"> {{labels[0]}} </tag> <tag color="blue">{{labels[1]}}</tag> <tag color="blue">{{labels[2]}}</tag> <tag color="blue">{{labels[3]}}</tag><tag color="blue"> {{labels[4]}} </tag> <tag color="blue">{{labels[5]}}</tag> <tag color="blue">{{labels[6]}}</tag> <tag color="blue">{{labels[7]}}</tag></p>
     </div>
 
     <div><p></p></div>
@@ -10,7 +10,7 @@
     <Card :padding="10">
 
       <div v-if="profile.user">
-        <p style="margin-top: -10px">
+        <p style="margin-top: 40px">
           <span v-if="profile.user" class="emphasis">{{profile.user.username}}</span>
           <span v-if="profile.school">@{{profile.school}}</span>
         </p>
@@ -34,64 +34,60 @@
               ～快来下载九宫格画像吧
               <Icon type="arrow-down-a"></Icon>
             </i-button>
-            <i-button type="info" @click="showQRcode()" style="font-size: x-large">
+            <i-button v-show="false" type="info" @click="showQRcode()" style="font-size: x-large">
               <Icon type="share"></Icon>
               扫描二维码有惊喜的哦～
             </i-button>
           </Button-group>
 <!--          <i-button style="margin-top: 10px"  type="info" icon = 'ios-download' @click="downReport()">点击收获你的称号勋章</i-button>-->
         </div>
-        <div id="qrcodeDiv" v-show="qrcodeVis" @click="closeQRcode()">
+<!--        <div id="qrcodeDiv" v-show="qrcodeVis" @click="closeQRcode()">-->
+        <div id="qrcodeDiv" v-show="false" @click="closeQRcode()">
           <span id="qrcode" ></span>
         </div>
 <!--        <card>-->
 <!--          <img src="static/img/totalreport/李云帆.jpeg" width="auto" height="1000" >-->
 <!--        </card>-->
-
-
-
-
-
         <div v-if="this.ifUserPortrait()" class="flex-container">
           <div class="left">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_在线格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_在线格.png' + '); background-size: cover'">
             </Card>
           </div>
           <div class="middle">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_下线格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_下线格.png' + '); background-size: cover'">
             </Card>
           </div>
           <div class="right">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_速度格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_速度格.png' + '); background-size: cover'">
             </Card>
           </div>
         </div>
         <div v-if="this.ifUserPortrait()" class="flex-container">
           <div class="left">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_知识格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_知识格.png' + '); background-size: cover'">
             </Card>
           </div>
           <div class="middle">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_雷达图.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_雷达图.png' + '); background-size: cover'">
             </Card>
           </div>
           <div class="right">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_提交格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_提交格.png' + '); background-size: cover'">
             </Card>
           </div>
         </div>
 
         <div v-if="this.ifUserPortrait()" class="flex-container">
           <div class="left">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_规范格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_规范格.png' + '); background-size: cover'">
             </Card>
           </div>
           <div class="middle">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_错误格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_错误格.png'+ '); background-size: cover'">
             </Card>
           </div>
           <div class="right">
-            <Card class="portraitText" :style="'background-image: url(static/img/userReport/'+this.getUserName()+'/'+this.getUserName()+'_首次格.png); background-size: cover'">
+            <Card class="portraitText" :style="'background-image: url(' + 'static/img/userReport/'+this.getUserName()+'/'+this.getUserName().replace(/[0-9]+/g, '')+'_首次格.png' + '); background-size: cover'">
             </Card>
           </div>
         </div>
@@ -102,7 +98,7 @@
 
       <div><p><br></p></div>
 
-      <Card  style="border-color: #ccccee; margin-top: 10px;border-style: solid; border-width: 4px;">
+      <Card v-show="false" style="border-color: #ccccee; margin-top: 10px;border-style: solid; border-width: 4px;">
       <p class="emphasis" style="font-size:200">统计图表<br><br></p>
       <grid-layout
         :layout.sync="layout"
@@ -204,6 +200,7 @@
   import stuLabels from '../user/data/stu19_labels'
   import ECharts from 'vue-echarts'
   import QRCode from 'qrcodejs2'
+  import stu20Users from './data/stu20/users'
 
   export default {
     components: {
@@ -721,6 +718,11 @@
             return true
           }
         }
+        for (let i = 0; i < stu20Users.length; i++) {
+          if (userName === stu20Users[i]) {
+            return true
+          }
+        }
         return false
       },
       showQRcode () {
@@ -805,7 +807,8 @@
         if (window.localStorage.getItem('userName')) {
           return window.localStorage.getItem('userName')
         }
-        window.localStorage.setItem('userName', this.user.username)
+        let userName = this.user.username
+        window.localStorage.setItem('userName', userName)
         return window.localStorage.getItem('userName')
       },
       getUserLanguage () {
@@ -1105,6 +1108,31 @@
         }
         // console.log(ret)
         return ret
+      },
+      processFile (filepath) {
+        if (filepath === null || filepath === undefined || filepath === '') {
+          return false
+        }
+        var xmlhttp
+        if (window.XMLHttpRequest) {
+          xmlhttp = new XMLHttpRequest()
+        }
+        xmlhttp.open('GET', filepath, false)
+        xmlhttp.send()
+        if (xmlhttp.readyState === 4) {
+          if (xmlhttp.status === 200) {
+            // console.log('aa')
+            return filepath
+          } else {
+            if (filepath.endsWith('.png')) {
+              return filepath.replace('png', 'jpg')
+            }
+            if (filepath.endsWith('.zip')) {
+              return filepath.replace('zip', 'rar')
+            }
+            // return filepath
+          }
+        }
       }
     },
     computed: {
