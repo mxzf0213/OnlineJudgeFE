@@ -243,6 +243,16 @@ export default {
       data
     })
   },
+  selftest (data) {
+    return ajax('sf_submission', 'post', {
+      data
+    })
+  },
+  getSelftestResult (data) {
+    return ajax('sf_submission', 'get', {
+      data
+    })
+  },
   getSubmissionList (offset, limit, params) {
     params.limit = limit
     params.offset = offset

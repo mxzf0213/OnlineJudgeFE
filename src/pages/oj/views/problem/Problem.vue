@@ -96,8 +96,28 @@
               <span v-if="submitting">Submitting</span>
               <span v-else>Submit</span>
             </Button>
+            <Button v-if="!selftestOpened" type="success" icon="ios-arrow-down" @click="openSelftest" class="fl-right" style="margin-right:5px;">
+              <span>Local Test</span>
+            </Button>
+            <Button v-if="selftestOpened" type="error" icon="ios-arrow-up" @click="openSelftest" class="fl-right" style="margin-right:5px;">
+              <span>Local Test</span>
+            </Button>
           </Col>
         </Row>
+      </Card>
+
+      <Card :padding="20" id="selftestbox" dis-hover v-if="selftestOpened">
+        <div class="subbox_left">
+          <h3>Test Case:</h3>
+          <Input v-model="testCase" type="textarea" :autosize="{minRows: 15,maxRows: 15}" placeholder="Enter the case you want to test" />
+          <Button type="primary" style="margin-top:10px;float:left;" @click="submitSelftest">
+              <span>Run</span>
+          </Button>
+        </div>
+        <div class="subbox_right">
+          <h3>Result:</h3>
+          <Input v-model="testOutput" type="textarea" :autosize="{minRows: 15,maxRows: 15}" readonly />
+        </div>
       </Card>
     </div>
 
@@ -303,7 +323,11 @@
           width: '500',
           height: '480'
         },
-        lastSubmissions: []
+        lastSubmissions: [],
+        testCase: '',
+        testOutput: '',
+        selftestOpened: false,
+        refreshSelftestStatus: false
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -584,6 +608,49 @@
       },
       getStatusTextColor (resultCode) {
         return JUDGE_STATUS[resultCode].color
+      },
+      openSelftest () {
+        this.selftestOpened = !this.selftestOpened
+      },
+      checkSelftestStatus () {
+        if (this.refreshSelftestStatus) {
+          // 如果之前的提交状态检查还没有停止,则停止,否则将会失去timeout的引用造成无限请求
+          clearTimeout(this.refreshSelftestStatus)
+        }
+        const checkStatus = () => {
+          api.getSelftestResult().then(res => {
+            console.log(res)
+            if (res.data.data.status !== 6) {
+              this.testOutput = res.data.data.output[0].output
+              clearTimeout(this.refreshSelftestStatus)
+            } else {
+              this.refreshSelftestStatus = setTimeout(checkStatus, 2000)
+            }
+          }, res => {
+            clearTimeout(this.refreshSelftestStatus)
+          })
+        }
+        this.refreshSelftestStatus = setTimeout(checkStatus, 2000)
+      },
+      submitSelftest () {
+        if (this.code.trim() === '') {
+          this.$error('Code can not be empty')
+          return
+        }
+        let data = {
+          language: this.language,
+          code: this.code,
+          test_case: [{
+            input: this.testCase,
+            output: ''
+          }]
+        }
+        console.log(data)
+        api.selftest(data).then(res => {
+          this.checkSelftestStatus()
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     computed: {
@@ -780,6 +847,19 @@
     }
   }
 
+ #selftestbox {
+    height: 420px;
+    .subbox_left {
+      width: 48%;
+      height: 380px;
+      float: left;
+    }
+    .subbox_right{
+      width: 48%;
+      height: 380px;
+      float: right;
+     }
+   }
 
 </style>
 
