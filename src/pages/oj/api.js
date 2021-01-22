@@ -243,6 +243,14 @@ export default {
       data
     })
   },
+  selftest (data) {
+    return ajax('sf_submission', 'post', {
+      data
+    })
+  },
+  getSelftestResult (data) {
+    return ajax('sf_submission', 'get', {})
+  },
   uploadCode (data) {
     return ajax('storeSubmission', 'post', {
       data
