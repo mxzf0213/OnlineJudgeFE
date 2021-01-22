@@ -243,18 +243,16 @@ export default {
       data
     })
   },
-<<<<<<< HEAD
   selftest (data) {
     return ajax('sf_submission', 'post', {
       data
     })
   },
   getSelftestResult (data) {
-    return ajax('sf_submission', 'get', {
-=======
+    return ajax('sf_submission', 'get', {})
+  },
   uploadCode (data) {
     return ajax('storeSubmission', 'post', {
->>>>>>> 05143e5401a50938c5ecdd99ec16480bc2aa86f4
       data
     })
   },

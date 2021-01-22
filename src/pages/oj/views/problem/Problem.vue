@@ -607,12 +607,22 @@
         }
       },
       getLastSubmission () {
-        api.getSubmissionList(0, 10, { username: this.user.username, myself: true, problem_id: this.problemID }).then(res => {
-          this.lastSubmissions = res.data.data.results
-          // console.log(this.lastSubmissions)
-        }).catch(err => {
-          console.log(err)
-        })
+        let isContest = !(this.$route.name === 'problem-details')
+        if (isContest) {
+          api.getContestSubmissionList(0, 10, { username: this.user.username, myself: true, problem_id: this.problemID, contest_id: this.contestID }).then(res => {
+            this.lastSubmissions = res.data.data.results
+            // console.log(this.lastSubmissions)
+          }).catch(_ => {
+            console.log('some error in getLastSubmission')
+          })
+        } else {
+          api.getSubmissionList(0, 10, { username: this.user.username, myself: true, problem_id: this.problemID }).then(res => {
+            this.lastSubmissions = res.data.data.results
+            // console.log(this.lastSubmissions)
+          }).catch(_ => {
+            console.log('some error in getLastSubmission')
+          })
+        }
       },
       changeUtcTime (tt) {
         return time.utcToLocal(tt).substr(time.utcToLocal(tt).indexOf('-') + 1)
